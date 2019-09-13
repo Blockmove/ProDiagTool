@@ -97,6 +97,7 @@ Public Class FormMain
         Dim Connection As OleDbConnection
         Dim SqlStatement As String
         Dim Adapter As OleDbDataAdapter
+        Dim Command As OleDbCommand
 
         'Datei-Operationen
         Try
@@ -121,6 +122,9 @@ Public Class FormMain
                     File.Copy(SourceFilenameProDiag, DestFilename)
                 End If
                 FileInfoDestFile = New FileInfo(DestFilename)
+                DestFilename = FileInfoDestFile.FullName
+            Else
+                DestFilename = Nothing
             End If
         Catch ex As Exception
             MsgBox(ex.Message)
@@ -128,21 +132,18 @@ Public Class FormMain
         End Try
 
         Try
-            If OpenFileDialog1.ShowDialog() = DialogResult.OK Then
-                FileInfoSourceFile = New FileInfo(OpenFileDialog1.FileName)
-                Connectionstring = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & FileInfoSourceFile.FullName & ";Extended Properties = ""Excel 12.0 Xml;HDR=YES"""
+            If DestFilename IsNot Nothing Then
+                Connectionstring = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & DestFilename & ";Extended Properties = ""Excel 12.0 Xml;HDR=YES"""
                 Connection = New OleDbConnection(Connectionstring)
                 SqlStatement = "SELECT ID, [Supervised tag], Trigger, [Specific text field] FROM [ProDiag Supervisions$]"
                 Adapter = New OleDbDataAdapter(SqlStatement, Connection)
-                Adapter.Fill(dsProDiag, "[ProDiag Supervisions$]")
-                dgvProDiag.DataSource = dsProDiag
-                dgvProDiag.DataMember = "[ProDiag Supervisions$]"
             End If
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
         Connection.Close()
         Connection.Dispose()
+        Command.Dispose()
     End Sub
 
     Private Sub ReplacementsLoad()
