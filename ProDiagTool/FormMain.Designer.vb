@@ -34,6 +34,7 @@ Partial Class FormMain
         Me.btnSymbolLoad = New System.Windows.Forms.Button()
         Me.dgvSymbol = New System.Windows.Forms.DataGridView()
         Me.gbProDiag = New System.Windows.Forms.GroupBox()
+        Me.btnProDiagSave = New System.Windows.Forms.Button()
         Me.btnProDiagLoad = New System.Windows.Forms.Button()
         Me.dgvProDiag = New System.Windows.Forms.DataGridView()
         Me.gbReplace = New System.Windows.Forms.GroupBox()
@@ -126,6 +127,7 @@ Partial Class FormMain
         '
         'gbProDiag
         '
+        Me.gbProDiag.Controls.Add(Me.btnProDiagSave)
         Me.gbProDiag.Controls.Add(Me.btnProDiagLoad)
         Me.gbProDiag.Controls.Add(Me.dgvProDiag)
         Me.gbProDiag.Location = New System.Drawing.Point(12, 242)
@@ -134,6 +136,15 @@ Partial Class FormMain
         Me.gbProDiag.TabIndex = 2
         Me.gbProDiag.TabStop = False
         Me.gbProDiag.Text = "ProDiag"
+        '
+        'btnProDiagSave
+        '
+        Me.btnProDiagSave.Location = New System.Drawing.Point(894, 130)
+        Me.btnProDiagSave.Name = "btnProDiagSave"
+        Me.btnProDiagSave.Size = New System.Drawing.Size(84, 45)
+        Me.btnProDiagSave.TabIndex = 2
+        Me.btnProDiagSave.Text = "Speichern"
+        Me.btnProDiagSave.UseVisualStyleBackColor = True
         '
         'btnProDiagLoad
         '
@@ -230,4 +241,5 @@ Partial Class FormMain
     Friend WithEvents gbReplace As GroupBox
     Friend WithEvents btnReplacementsLoad As Button
     Friend WithEvents dgvReplacements As DataGridView
+    Friend WithEvents btnProDiagSave As Button
 End Class
