@@ -31,11 +31,16 @@ Partial Class FormMain
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.gbSymbole = New System.Windows.Forms.GroupBox()
-        Me.dgvSymbole = New System.Windows.Forms.DataGridView()
         Me.btnSymbolLoad = New System.Windows.Forms.Button()
+        Me.dgvSymbol = New System.Windows.Forms.DataGridView()
+        Me.gbProDiag = New System.Windows.Forms.GroupBox()
+        Me.btnProDiagLoad = New System.Windows.Forms.Button()
+        Me.dgvProDiag = New System.Windows.Forms.DataGridView()
         Me.MainMenu.SuspendLayout()
         Me.gbSymbole.SuspendLayout()
-        CType(Me.dgvSymbole, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.dgvSymbol, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.gbProDiag.SuspendLayout()
+        CType(Me.dgvProDiag, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'MainMenu
@@ -85,7 +90,7 @@ Partial Class FormMain
         'gbSymbole
         '
         Me.gbSymbole.Controls.Add(Me.btnSymbolLoad)
-        Me.gbSymbole.Controls.Add(Me.dgvSymbole)
+        Me.gbSymbole.Controls.Add(Me.dgvSymbol)
         Me.gbSymbole.Location = New System.Drawing.Point(12, 37)
         Me.gbSymbole.Name = "gbSymbole"
         Me.gbSymbole.Size = New System.Drawing.Size(984, 223)
@@ -93,32 +98,65 @@ Partial Class FormMain
         Me.gbSymbole.TabStop = False
         Me.gbSymbole.Text = "Symbole"
         '
-        'dgvSymbole
-        '
-        Me.dgvSymbole.AllowUserToAddRows = False
-        Me.dgvSymbole.AllowUserToDeleteRows = False
-        Me.dgvSymbole.AllowUserToOrderColumns = True
-        Me.dgvSymbole.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvSymbole.Location = New System.Drawing.Point(6, 19)
-        Me.dgvSymbole.Name = "dgvSymbole"
-        Me.dgvSymbole.ReadOnly = True
-        Me.dgvSymbole.Size = New System.Drawing.Size(882, 198)
-        Me.dgvSymbole.TabIndex = 0
-        '
-        'btnSymboleLoad
+        'btnSymbolLoad
         '
         Me.btnSymbolLoad.Location = New System.Drawing.Point(894, 19)
-        Me.btnSymbolLoad.Name = "btnSymboleLoad"
+        Me.btnSymbolLoad.Name = "btnSymbolLoad"
         Me.btnSymbolLoad.Size = New System.Drawing.Size(84, 45)
         Me.btnSymbolLoad.TabIndex = 1
         Me.btnSymbolLoad.Text = "Laden"
         Me.btnSymbolLoad.UseVisualStyleBackColor = True
+        '
+        'dgvSymbol
+        '
+        Me.dgvSymbol.AllowUserToAddRows = False
+        Me.dgvSymbol.AllowUserToDeleteRows = False
+        Me.dgvSymbol.AllowUserToOrderColumns = True
+        Me.dgvSymbol.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvSymbol.Location = New System.Drawing.Point(6, 19)
+        Me.dgvSymbol.Name = "dgvSymbol"
+        Me.dgvSymbol.ReadOnly = True
+        Me.dgvSymbol.Size = New System.Drawing.Size(882, 198)
+        Me.dgvSymbol.TabIndex = 0
+        '
+        'gbProDiag
+        '
+        Me.gbProDiag.Controls.Add(Me.btnProDiagLoad)
+        Me.gbProDiag.Controls.Add(Me.dgvProDiag)
+        Me.gbProDiag.Location = New System.Drawing.Point(12, 266)
+        Me.gbProDiag.Name = "gbProDiag"
+        Me.gbProDiag.Size = New System.Drawing.Size(984, 223)
+        Me.gbProDiag.TabIndex = 2
+        Me.gbProDiag.TabStop = False
+        Me.gbProDiag.Text = "ProDiag"
+        '
+        'btnProDiagLoad
+        '
+        Me.btnProDiagLoad.Location = New System.Drawing.Point(894, 19)
+        Me.btnProDiagLoad.Name = "btnProDiagLoad"
+        Me.btnProDiagLoad.Size = New System.Drawing.Size(84, 45)
+        Me.btnProDiagLoad.TabIndex = 1
+        Me.btnProDiagLoad.Text = "Laden"
+        Me.btnProDiagLoad.UseVisualStyleBackColor = True
+        '
+        'dgvProDiag
+        '
+        Me.dgvProDiag.AllowUserToAddRows = False
+        Me.dgvProDiag.AllowUserToDeleteRows = False
+        Me.dgvProDiag.AllowUserToOrderColumns = True
+        Me.dgvProDiag.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvProDiag.Location = New System.Drawing.Point(6, 19)
+        Me.dgvProDiag.Name = "dgvProDiag"
+        Me.dgvProDiag.ReadOnly = True
+        Me.dgvProDiag.Size = New System.Drawing.Size(882, 198)
+        Me.dgvProDiag.TabIndex = 0
         '
         'FormMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1008, 661)
+        Me.Controls.Add(Me.gbProDiag)
         Me.Controls.Add(Me.gbSymbole)
         Me.Controls.Add(Me.MainMenu)
         Me.MainMenuStrip = Me.MainMenu
@@ -127,7 +165,9 @@ Partial Class FormMain
         Me.MainMenu.ResumeLayout(False)
         Me.MainMenu.PerformLayout()
         Me.gbSymbole.ResumeLayout(False)
-        CType(Me.dgvSymbole, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.dgvSymbol, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.gbProDiag.ResumeLayout(False)
+        CType(Me.dgvProDiag, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -143,5 +183,8 @@ Partial Class FormMain
     Friend WithEvents SaveFileDialog1 As SaveFileDialog
     Friend WithEvents gbSymbole As GroupBox
     Friend WithEvents btnSymbolLoad As Button
-    Friend WithEvents dgvSymbole As DataGridView
+    Friend WithEvents dgvSymbol As DataGridView
+    Friend WithEvents gbProDiag As GroupBox
+    Friend WithEvents btnProDiagLoad As Button
+    Friend WithEvents dgvProDiag As DataGridView
 End Class
