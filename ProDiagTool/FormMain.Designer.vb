@@ -36,11 +36,16 @@ Partial Class FormMain
         Me.gbProDiag = New System.Windows.Forms.GroupBox()
         Me.btnProDiagLoad = New System.Windows.Forms.Button()
         Me.dgvProDiag = New System.Windows.Forms.DataGridView()
+        Me.gbReplace = New System.Windows.Forms.GroupBox()
+        Me.btnReplacementsLoad = New System.Windows.Forms.Button()
+        Me.dgvReplacements = New System.Windows.Forms.DataGridView()
         Me.MainMenu.SuspendLayout()
         Me.gbSymbole.SuspendLayout()
         CType(Me.dgvSymbol, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbProDiag.SuspendLayout()
         CType(Me.dgvProDiag, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.gbReplace.SuspendLayout()
+        CType(Me.dgvReplacements, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'MainMenu
@@ -93,7 +98,7 @@ Partial Class FormMain
         Me.gbSymbole.Controls.Add(Me.dgvSymbol)
         Me.gbSymbole.Location = New System.Drawing.Point(12, 37)
         Me.gbSymbole.Name = "gbSymbole"
-        Me.gbSymbole.Size = New System.Drawing.Size(984, 223)
+        Me.gbSymbole.Size = New System.Drawing.Size(984, 199)
         Me.gbSymbole.TabIndex = 1
         Me.gbSymbole.TabStop = False
         Me.gbSymbole.Text = "Symbole"
@@ -116,16 +121,16 @@ Partial Class FormMain
         Me.dgvSymbol.Location = New System.Drawing.Point(6, 19)
         Me.dgvSymbol.Name = "dgvSymbol"
         Me.dgvSymbol.ReadOnly = True
-        Me.dgvSymbol.Size = New System.Drawing.Size(882, 198)
+        Me.dgvSymbol.Size = New System.Drawing.Size(882, 166)
         Me.dgvSymbol.TabIndex = 0
         '
         'gbProDiag
         '
         Me.gbProDiag.Controls.Add(Me.btnProDiagLoad)
         Me.gbProDiag.Controls.Add(Me.dgvProDiag)
-        Me.gbProDiag.Location = New System.Drawing.Point(12, 266)
+        Me.gbProDiag.Location = New System.Drawing.Point(12, 242)
         Me.gbProDiag.Name = "gbProDiag"
-        Me.gbProDiag.Size = New System.Drawing.Size(984, 223)
+        Me.gbProDiag.Size = New System.Drawing.Size(984, 188)
         Me.gbProDiag.TabIndex = 2
         Me.gbProDiag.TabStop = False
         Me.gbProDiag.Text = "ProDiag"
@@ -148,14 +153,47 @@ Partial Class FormMain
         Me.dgvProDiag.Location = New System.Drawing.Point(6, 19)
         Me.dgvProDiag.Name = "dgvProDiag"
         Me.dgvProDiag.ReadOnly = True
-        Me.dgvProDiag.Size = New System.Drawing.Size(882, 198)
+        Me.dgvProDiag.Size = New System.Drawing.Size(882, 156)
         Me.dgvProDiag.TabIndex = 0
+        '
+        'gbReplace
+        '
+        Me.gbReplace.Controls.Add(Me.btnReplacementsLoad)
+        Me.gbReplace.Controls.Add(Me.dgvReplacements)
+        Me.gbReplace.Location = New System.Drawing.Point(12, 436)
+        Me.gbReplace.Name = "gbReplace"
+        Me.gbReplace.Size = New System.Drawing.Size(984, 188)
+        Me.gbReplace.TabIndex = 3
+        Me.gbReplace.TabStop = False
+        Me.gbReplace.Text = "Textersetzungen"
+        '
+        'btnReplacementsLoad
+        '
+        Me.btnReplacementsLoad.Location = New System.Drawing.Point(894, 19)
+        Me.btnReplacementsLoad.Name = "btnReplacementsLoad"
+        Me.btnReplacementsLoad.Size = New System.Drawing.Size(84, 45)
+        Me.btnReplacementsLoad.TabIndex = 1
+        Me.btnReplacementsLoad.Text = "Laden"
+        Me.btnReplacementsLoad.UseVisualStyleBackColor = True
+        '
+        'dgvReplacements
+        '
+        Me.dgvReplacements.AllowUserToAddRows = False
+        Me.dgvReplacements.AllowUserToDeleteRows = False
+        Me.dgvReplacements.AllowUserToOrderColumns = True
+        Me.dgvReplacements.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgvReplacements.Location = New System.Drawing.Point(6, 19)
+        Me.dgvReplacements.Name = "dgvReplacements"
+        Me.dgvReplacements.ReadOnly = True
+        Me.dgvReplacements.Size = New System.Drawing.Size(882, 156)
+        Me.dgvReplacements.TabIndex = 0
         '
         'FormMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1008, 661)
+        Me.Controls.Add(Me.gbReplace)
         Me.Controls.Add(Me.gbProDiag)
         Me.Controls.Add(Me.gbSymbole)
         Me.Controls.Add(Me.MainMenu)
@@ -168,6 +206,8 @@ Partial Class FormMain
         CType(Me.dgvSymbol, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbProDiag.ResumeLayout(False)
         CType(Me.dgvProDiag, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.gbReplace.ResumeLayout(False)
+        CType(Me.dgvReplacements, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -187,4 +227,7 @@ Partial Class FormMain
     Friend WithEvents gbProDiag As GroupBox
     Friend WithEvents btnProDiagLoad As Button
     Friend WithEvents dgvProDiag As DataGridView
+    Friend WithEvents gbReplace As GroupBox
+    Friend WithEvents btnReplacementsLoad As Button
+    Friend WithEvents dgvReplacements As DataGridView
 End Class
