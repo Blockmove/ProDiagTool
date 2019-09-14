@@ -96,8 +96,8 @@ Public Class FormMain
         Dim Connectionstring As String
         Dim Connection As OleDbConnection
         Dim SqlStatement As String
-        Dim Adapter As OleDbDataAdapter
         Dim Command As OleDbCommand
+        Dim rowProDiag As DataRow
 
         'Datei-Operationen
         Try
@@ -135,8 +135,15 @@ Public Class FormMain
             If DestFilename IsNot Nothing Then
                 Connectionstring = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & DestFilename & ";Extended Properties = ""Excel 12.0 Xml;HDR=YES"""
                 Connection = New OleDbConnection(Connectionstring)
-                SqlStatement = "SELECT ID, [Supervised tag], Trigger, [Specific text field] FROM [ProDiag Supervisions$]"
-                Adapter = New OleDbDataAdapter(SqlStatement, Connection)
+                SqlStatement = "UPDATE [ProDiag Supervisions$] SET [Specific text field] = @SpecificTextField WHERE ID = @ID"
+                Command = New OleDbCommand(SqlStatement, Connection)
+                Command.Parameters.AddWithValue("@SpecificTextField", "Init")
+                Command.Parameters.AddWithValue("@ID", "0")
+                Connection.Open()
+                Command.ExecuteNonQuery()
+                For Each rowProDiag In dsProDiag.Tables(0).Rows
+                    Dim Test As String = rowProDiag.Item("ID")
+                Next
             End If
         Catch ex As Exception
             MsgBox(ex.Message)
@@ -144,6 +151,7 @@ Public Class FormMain
         Connection.Close()
         Connection.Dispose()
         Command.Dispose()
+
     End Sub
 
     Private Sub ReplacementsLoad()
