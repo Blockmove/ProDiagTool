@@ -174,8 +174,8 @@ Public Class FormMain
                 Connection.Open()
                 Anzahl = Command.ExecuteNonQuery()
                 For Each rowProDiag In dsProDiag.Tables(0).Rows
-                    Command.Parameters("@SpecificTextField").Value = rowProDiag.Item("ID")
                     Command.Parameters("@SpecificTextField").Value = rowProDiag.Item("Specific text field")
+                    Command.Parameters("@ID").Value = rowProDiag.Item("ID")
                     Anzahl = Command.ExecuteNonQuery()
                 Next
             End If
@@ -251,13 +251,13 @@ Public Class FormMain
             For Each rowProDiag In dsProDiag.Tables("[ProDiag Supervisions$]").Rows
 
                 'Operant / Symbol
-                Operant = "Op: " & rowProDiag.Item("Supervised tag").ToString.Replace(Chr(34), "")
+                Operant = "|Var: " & rowProDiag.Item("Supervised tag").ToString.Replace(Chr(34), "")
 
                 'Adresse
                 If rowProDiag.Item("Adresse").ToString <> "" Then
-                    Adresse = "Adr: " & rowProDiag.Item("Adresse")
+                    Adresse = "|Adr: " & rowProDiag.Item("Adresse")
                 Else
-                    Adresse = "Adr: ???"
+                    Adresse = "|Adr: ???"
                 End If
 
                 'Kommentar
@@ -283,7 +283,7 @@ Public Class FormMain
                 End If
 
                 'Spezifischen Text zusammenbauen
-                SpecificText = Operant & " " & Comment & " " & Adresse
+                SpecificText = Comment & " " & Operant & " " & Adresse
 
                 If rowProDiag.Item("Specific text field").ToString <> "" _
                     And Not rowProDiag.Item("Specific text field").ToString.Contains("Text fehlt") _
