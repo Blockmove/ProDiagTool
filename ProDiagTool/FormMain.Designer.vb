@@ -38,6 +38,7 @@ Partial Class FormMain
         Me.gbReplace = New System.Windows.Forms.GroupBox()
         Me.btnReplacementsLoad = New System.Windows.Forms.Button()
         Me.dgvReplacements = New System.Windows.Forms.DataGridView()
+        Me.btnSpecificTextCreate = New System.Windows.Forms.Button()
         Me.MainMenu.SuspendLayout()
         Me.gbSymbole.SuspendLayout()
         CType(Me.dgvSymbol, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -107,6 +108,7 @@ Partial Class FormMain
         '
         'gbProDiag
         '
+        Me.gbProDiag.Controls.Add(Me.btnSpecificTextCreate)
         Me.gbProDiag.Controls.Add(Me.btnSymbolsMap)
         Me.gbProDiag.Controls.Add(Me.btnProDiagSave)
         Me.gbProDiag.Controls.Add(Me.btnProDiagLoad)
@@ -118,13 +120,13 @@ Partial Class FormMain
         Me.gbProDiag.TabStop = False
         Me.gbProDiag.Text = "ProDiag"
         '
-        'btnSymbolSearch
+        'btnSymbolsMap
         '
         Me.btnSymbolsMap.Location = New System.Drawing.Point(894, 53)
-        Me.btnSymbolsMap.Name = "btnSymbolSearch"
+        Me.btnSymbolsMap.Name = "btnSymbolsMap"
         Me.btnSymbolsMap.Size = New System.Drawing.Size(84, 36)
         Me.btnSymbolsMap.TabIndex = 3
-        Me.btnSymbolsMap.Text = "Symbole" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "suchen"
+        Me.btnSymbolsMap.Text = "Symbole" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "mappen"
         Me.btnSymbolsMap.UseVisualStyleBackColor = True
         '
         'btnProDiagSave
@@ -189,6 +191,15 @@ Partial Class FormMain
         Me.dgvReplacements.Size = New System.Drawing.Size(882, 156)
         Me.dgvReplacements.TabIndex = 0
         '
+        'btnSpecificTextCreate
+        '
+        Me.btnSpecificTextCreate.Location = New System.Drawing.Point(894, 95)
+        Me.btnSpecificTextCreate.Name = "btnSpecificTextCreate"
+        Me.btnSpecificTextCreate.Size = New System.Drawing.Size(84, 36)
+        Me.btnSpecificTextCreate.TabIndex = 4
+        Me.btnSpecificTextCreate.Text = "Spezifischen" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Text erstellen"
+        Me.btnSpecificTextCreate.UseVisualStyleBackColor = True
+        '
         'FormMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -230,4 +241,5 @@ Partial Class FormMain
     Friend WithEvents dgvReplacements As DataGridView
     Friend WithEvents btnProDiagSave As Button
     Friend WithEvents btnSymbolsMap As Button
+    Friend WithEvents btnSpecificTextCreate As Button
 End Class

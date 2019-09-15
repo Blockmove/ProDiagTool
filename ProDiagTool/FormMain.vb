@@ -12,6 +12,7 @@ Public Class FormMain
 
     Dim dsReplacements As DataSet
     Dim ReplacementsLoaded As Boolean
+
     Private Sub BeendenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BeendenToolStripMenuItem.Click
         Me.Close()
     End Sub
@@ -39,8 +40,15 @@ Public Class FormMain
     End Sub
 
     Private Sub BtnSymbolsMap_Click(sender As Object, e As EventArgs) Handles btnSymbolsMap.Click
-        Dim anzahl As Integer
-        anzahl = SymbolsMap()
+        Dim Anzahl As Integer
+        Anzahl = SymbolsMap()
+        MsgBox("Symbole gefunden: " & Anzahl)
+    End Sub
+
+    Private Sub BtnSpecificTextCreate_Click(sender As Object, e As EventArgs) Handles btnSpecificTextCreate.Click
+        Dim Anzahl As Integer
+        Anzahl = SpecificTextCreate()
+        MsgBox("Texte bearbeitet: " & Anzahl)
     End Sub
 
     Private Sub SymbolLoad()
@@ -224,11 +232,76 @@ Public Class FormMain
                     End If
                 Next
             Next
-            MsgBox("Symbole gefunden: " & Anzahl)
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
         SymbolsMap = Anzahl
     End Function
 
+    Private Function SpecificTextCreate() As Integer
+        Dim rowProDiag As DataRow
+        Dim Operant As String
+        Dim Adresse As String
+        Dim Comment As String
+        Dim rowReplacement As DataRow
+        Dim Replace As Boolean
+        Dim SpecificText As String
+        Dim Anzahl As Integer
+        Try
+            For Each rowProDiag In dsProDiag.Tables("[ProDiag Supervisions$]").Rows
+
+                'Operant / Symbol
+                Operant = "Op: " & rowProDiag.Item("Supervised tag").ToString.Replace(Chr(34), "")
+
+                'Adresse
+                If rowProDiag.Item("Adresse").ToString <> "" Then
+                    Adresse = "Adr: " & rowProDiag.Item("Adresse")
+                Else
+                    Adresse = "Adr: ???"
+                End If
+
+                'Kommentar
+                Comment = "Text: " & rowProDiag.Item("Comment").ToString
+                For Each rowReplacement In dsReplacements.Tables("[Ersetzungen$]").Rows
+                    Replace = False
+                    'Trigger prüfen
+                    If rowReplacement.Item("Trigger") = "True" And rowProDiag.Item("Trigger") = "True" Then
+                        Replace = True
+                    ElseIf rowReplacement.Item("Trigger") = "False" And rowProDiag.Item("Trigger") = "False" Then
+                        Replace = True
+                    ElseIf rowReplacement.Item("Trigger") = "" Then
+                        Replace = True
+                    End If
+
+                    'Ersetzung
+                    If Replace And Comment.Contains(rowReplacement.Item("Text")) Then
+                        Comment = Comment.Replace(rowReplacement.Item("Text"), rowReplacement.Item("Replace"))
+                    End If
+                Next
+                If Comment = "" Then
+                    Comment = "Text fehlt"
+                End If
+
+                'Spezifischen Text zusammenbauen
+                SpecificText = Operant & " " & Comment & " " & Adresse
+
+                If rowProDiag.Item("Specific text field").ToString <> "" _
+                    And Not rowProDiag.Item("Specific text field").ToString.Contains("Text fehlt") _
+                    And Not rowProDiag.Item("Specific text field").ToString = SpecificText _
+                Then
+                    Select Case MessageBox.Show(rowProDiag.Item("Specific text field").ToString & vbCrLf & "Neuer Text: " & vbCrLf & SpecificText _
+                                                , "Spezifischen Text überschreiben", MessageBoxButtons.YesNo)
+                        Case Windows.Forms.DialogResult.Yes
+                            rowProDiag.Item("Specific text field") = SpecificText
+                    End Select
+                Else
+                    rowProDiag.Item("Specific text field") = SpecificText
+                End If
+                Anzahl += 1
+            Next
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+        SpecificTextCreate = Anzahl
+    End Function
 End Class
