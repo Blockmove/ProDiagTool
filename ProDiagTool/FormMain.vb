@@ -2,12 +2,16 @@
 Imports System.IO
 Public Class FormMain
 
-    Dim dsSymbol As New DataSet
+    Dim dsSymbol As DataSet
+    Dim SymbolLoaded As Boolean
 
     Dim SourceFilenameProDiag As String
-    Dim dsProDiag As New DataSet
+    Dim fiProDiagSourceFile As FileInfo
+    Dim dsProDiag As DataSet
+    Dim ProDiagLoaded As Boolean
 
-    Dim dsReplacements As New DataSet
+    Dim dsReplacements As DataSet
+    Dim ReplacementsLoaded As Boolean
     Private Sub BeendenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BeendenToolStripMenuItem.Click
         Me.Close()
     End Sub
@@ -18,6 +22,12 @@ Public Class FormMain
 
     Private Sub BtnProDiagLoad_Click(sender As Object, e As EventArgs) Handles btnProDiagLoad.Click
         ProDiagLoad()
+        If ProDiagLoaded Then
+            dsProDiag.Tables(0).Columns.Add("Adresse")
+            dsProDiag.Tables(0).Columns.Add("Comment")
+            dgvProDiag.DataSource = dsProDiag
+            dgvProDiag.DataMember = "[ProDiag Supervisions$]"
+        End If
     End Sub
 
     Private Sub BtnProDiagSave_Click(sender As Object, e As EventArgs) Handles btnProDiagSave.Click
@@ -28,6 +38,11 @@ Public Class FormMain
         ReplacementsLoad()
     End Sub
 
+    Private Sub BtnSymbolsMap_Click(sender As Object, e As EventArgs) Handles btnSymbolsMap.Click
+        Dim anzahl As Integer
+        anzahl = SymbolsMap()
+    End Sub
+
     Private Sub SymbolLoad()
         Dim FileInfoSourceFile As FileInfo
         Dim Connectionstring As String
@@ -35,6 +50,7 @@ Public Class FormMain
         Dim SqlStatement As String
         Dim Adapter As OleDbDataAdapter
 
+        SymbolLoaded = False
         Try
             OpenFileDialog1.Title = "Symboltabelle laden"
             OpenFileDialog1.InitialDirectory = My.Computer.FileSystem.SpecialDirectories.MyDocuments
@@ -46,9 +62,11 @@ Public Class FormMain
                 Connection = New OleDbConnection(Connectionstring)
                 SqlStatement = "SELECT Name, [Logical Address], Comment, [Data Type] FROM [PLC Tags$]"
                 Adapter = New OleDbDataAdapter(SqlStatement, Connection)
+                dsSymbol = New DataSet
                 Adapter.Fill(dsSymbol, "[PLC Tags$]")
                 dgvSymbol.DataSource = dsSymbol
                 dgvSymbol.DataMember = "[PLC Tags$]"
+                SymbolLoaded = True
             End If
         Catch ex As Exception
             MsgBox(ex.Message)
@@ -64,7 +82,8 @@ Public Class FormMain
         Dim SqlStatement As String
         Dim Adapter As OleDbDataAdapter
 
-        SourceFilenameProDiag = ""
+        ProDiagLoaded = False
+        SourceFilenameProDiag = Nothing
         Try
             OpenFileDialog1.Title = "ProDiag-Datei laden"
             OpenFileDialog1.InitialDirectory = My.Computer.FileSystem.SpecialDirectories.MyDocuments
@@ -76,10 +95,10 @@ Public Class FormMain
                 Connection = New OleDbConnection(Connectionstring)
                 SqlStatement = "SELECT ID, [Supervised tag], Trigger, [Specific text field] FROM [ProDiag Supervisions$]"
                 Adapter = New OleDbDataAdapter(SqlStatement, Connection)
+                dsProDiag = New DataSet
                 Adapter.Fill(dsProDiag, "[ProDiag Supervisions$]")
-                dgvProDiag.DataSource = dsProDiag
-                dgvProDiag.DataMember = "[ProDiag Supervisions$]"
                 SourceFilenameProDiag = FileInfoSourceFile.FullName
+                ProDiagLoaded = True
             End If
         Catch ex As Exception
             MsgBox(ex.Message)
@@ -98,6 +117,7 @@ Public Class FormMain
         Dim SqlStatement As String
         Dim Command As OleDbCommand
         Dim rowProDiag As DataRow
+        Dim Anzahl As Integer
 
         'Datei-Operationen
         Try
@@ -109,12 +129,14 @@ Public Class FormMain
             End If
             File.Copy(SourceFilenameProDiag, BackupFilename)
 
+            'SavFileDialog init
             SaveFileDialog1.Title = "ProDiag-Datei speichern"
             SaveFileDialog1.InitialDirectory = FileInfoSourceFile.DirectoryName
             SaveFileDialog1.Filter = "Excel Files (*.xlsx)|*.xlsx"
             SaveFileDialog1.FileName = FileInfoSourceFile.Name.Replace(".xlsx", "New.xlsx")
             If SaveFileDialog1.ShowDialog() = DialogResult.OK Then
                 DestFilename = SaveFileDialog1.FileName
+                'Neuer Filename -> Orignalfile kopieren
                 If DestFilename.ToLower <> SourceFilenameProDiag.ToLower Then
                     If File.Exists(DestFilename) Then
                         File.Delete(DestFilename)
@@ -131,18 +153,22 @@ Public Class FormMain
             Exit Sub
         End Try
 
+        'Datenbank / Excel Operationen
         Try
             If DestFilename IsNot Nothing Then
                 Connectionstring = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & DestFilename & ";Extended Properties = ""Excel 12.0 Xml;HDR=YES"""
                 Connection = New OleDbConnection(Connectionstring)
                 SqlStatement = "UPDATE [ProDiag Supervisions$] SET [Specific text field] = @SpecificTextField WHERE ID = @ID"
                 Command = New OleDbCommand(SqlStatement, Connection)
+                'Parameter erzeugen
                 Command.Parameters.AddWithValue("@SpecificTextField", "Init")
                 Command.Parameters.AddWithValue("@ID", "0")
                 Connection.Open()
-                Command.ExecuteNonQuery()
+                Anzahl = Command.ExecuteNonQuery()
                 For Each rowProDiag In dsProDiag.Tables(0).Rows
-                    Dim Test As String = rowProDiag.Item("ID")
+                    Command.Parameters("@SpecificTextField").Value = rowProDiag.Item("ID")
+                    Command.Parameters("@SpecificTextField").Value = rowProDiag.Item("Specific text field")
+                    Anzahl = Command.ExecuteNonQuery()
                 Next
             End If
         Catch ex As Exception
@@ -170,6 +196,7 @@ Public Class FormMain
                 Connectionstring = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & FileInfoSourceFile.FullName & ";Extended Properties = ""Excel 12.0 Xml;HDR=YES"""
                 Connection = New OleDbConnection(Connectionstring)
                 Adapter = New OleDbDataAdapter("SELECT * FROM [Ersetzungen$]", Connection)
+                dsReplacements = New DataSet
                 Adapter.Fill(dsReplacements, "[Ersetzungen$]")
                 dgvReplacements.DataSource = dsReplacements
                 dgvReplacements.DataMember = "[Ersetzungen$]"
@@ -180,5 +207,27 @@ Public Class FormMain
         Connection.Close()
         Connection.Dispose()
     End Sub
+
+    Private Function SymbolsMap() As Integer
+        Dim rowProDiag As DataRow
+        Dim rowSymbol As DataRow
+        Dim Anzahl As Integer
+        Try
+            For Each rowProDiag In dsProDiag.Tables("[ProDiag Supervisions$]").Rows
+                For Each rowSymbol In dsSymbol.Tables("[PLC Tags$]").Rows
+                    'Bei Supervised tag müssen die Anführungszeichen Chr(34) entfernt werden  
+                    If rowProDiag.Item("Supervised tag").ToString.Replace(Chr(34), "") = rowSymbol.Item("Name").ToString Then
+                        rowProDiag.Item("Adresse") = rowSymbol.Item("Logical Address")
+                        rowProDiag.Item("Comment") = rowSymbol.Item("Comment")
+                        Anzahl += 1
+                    End If
+                Next
+            Next
+            MsgBox("Symbole gefunden: " & Anzahl)
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+        SymbolsMap = Anzahl
+    End Function
 
 End Class

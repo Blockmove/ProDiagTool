@@ -24,9 +24,6 @@ Partial Class FormMain
     Private Sub InitializeComponent()
         Me.MainMenu = New System.Windows.Forms.MenuStrip()
         Me.DateiToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.SymboltabelleLadenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ProDiagLadenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TextersetzungenLadenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BeendenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
@@ -34,6 +31,7 @@ Partial Class FormMain
         Me.btnSymbolLoad = New System.Windows.Forms.Button()
         Me.dgvSymbol = New System.Windows.Forms.DataGridView()
         Me.gbProDiag = New System.Windows.Forms.GroupBox()
+        Me.btnSymbolsMap = New System.Windows.Forms.Button()
         Me.btnProDiagSave = New System.Windows.Forms.Button()
         Me.btnProDiagLoad = New System.Windows.Forms.Button()
         Me.dgvProDiag = New System.Windows.Forms.DataGridView()
@@ -60,33 +58,15 @@ Partial Class FormMain
         '
         'DateiToolStripMenuItem
         '
-        Me.DateiToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SymboltabelleLadenToolStripMenuItem, Me.ProDiagLadenToolStripMenuItem, Me.TextersetzungenLadenToolStripMenuItem, Me.BeendenToolStripMenuItem})
+        Me.DateiToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BeendenToolStripMenuItem})
         Me.DateiToolStripMenuItem.Name = "DateiToolStripMenuItem"
         Me.DateiToolStripMenuItem.Size = New System.Drawing.Size(46, 20)
         Me.DateiToolStripMenuItem.Text = "Datei"
         '
-        'SymboltabelleLadenToolStripMenuItem
-        '
-        Me.SymboltabelleLadenToolStripMenuItem.Name = "SymboltabelleLadenToolStripMenuItem"
-        Me.SymboltabelleLadenToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
-        Me.SymboltabelleLadenToolStripMenuItem.Text = "Symboltabelle laden"
-        '
-        'ProDiagLadenToolStripMenuItem
-        '
-        Me.ProDiagLadenToolStripMenuItem.Name = "ProDiagLadenToolStripMenuItem"
-        Me.ProDiagLadenToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
-        Me.ProDiagLadenToolStripMenuItem.Text = "ProDiag laden"
-        '
-        'TextersetzungenLadenToolStripMenuItem
-        '
-        Me.TextersetzungenLadenToolStripMenuItem.Name = "TextersetzungenLadenToolStripMenuItem"
-        Me.TextersetzungenLadenToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
-        Me.TextersetzungenLadenToolStripMenuItem.Text = "Textersetzungen laden"
-        '
         'BeendenToolStripMenuItem
         '
         Me.BeendenToolStripMenuItem.Name = "BeendenToolStripMenuItem"
-        Me.BeendenToolStripMenuItem.Size = New System.Drawing.Size(191, 22)
+        Me.BeendenToolStripMenuItem.Size = New System.Drawing.Size(120, 22)
         Me.BeendenToolStripMenuItem.Text = "Beenden"
         '
         'OpenFileDialog1
@@ -108,7 +88,7 @@ Partial Class FormMain
         '
         Me.btnSymbolLoad.Location = New System.Drawing.Point(894, 19)
         Me.btnSymbolLoad.Name = "btnSymbolLoad"
-        Me.btnSymbolLoad.Size = New System.Drawing.Size(84, 45)
+        Me.btnSymbolLoad.Size = New System.Drawing.Size(84, 28)
         Me.btnSymbolLoad.TabIndex = 1
         Me.btnSymbolLoad.Text = "Laden"
         Me.btnSymbolLoad.UseVisualStyleBackColor = True
@@ -127,6 +107,7 @@ Partial Class FormMain
         '
         'gbProDiag
         '
+        Me.gbProDiag.Controls.Add(Me.btnSymbolsMap)
         Me.gbProDiag.Controls.Add(Me.btnProDiagSave)
         Me.gbProDiag.Controls.Add(Me.btnProDiagLoad)
         Me.gbProDiag.Controls.Add(Me.dgvProDiag)
@@ -137,11 +118,20 @@ Partial Class FormMain
         Me.gbProDiag.TabStop = False
         Me.gbProDiag.Text = "ProDiag"
         '
+        'btnSymbolSearch
+        '
+        Me.btnSymbolsMap.Location = New System.Drawing.Point(894, 53)
+        Me.btnSymbolsMap.Name = "btnSymbolSearch"
+        Me.btnSymbolsMap.Size = New System.Drawing.Size(84, 36)
+        Me.btnSymbolsMap.TabIndex = 3
+        Me.btnSymbolsMap.Text = "Symbole" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "suchen"
+        Me.btnSymbolsMap.UseVisualStyleBackColor = True
+        '
         'btnProDiagSave
         '
-        Me.btnProDiagSave.Location = New System.Drawing.Point(894, 130)
+        Me.btnProDiagSave.Location = New System.Drawing.Point(894, 147)
         Me.btnProDiagSave.Name = "btnProDiagSave"
-        Me.btnProDiagSave.Size = New System.Drawing.Size(84, 45)
+        Me.btnProDiagSave.Size = New System.Drawing.Size(84, 28)
         Me.btnProDiagSave.TabIndex = 2
         Me.btnProDiagSave.Text = "Speichern"
         Me.btnProDiagSave.UseVisualStyleBackColor = True
@@ -150,7 +140,7 @@ Partial Class FormMain
         '
         Me.btnProDiagLoad.Location = New System.Drawing.Point(894, 19)
         Me.btnProDiagLoad.Name = "btnProDiagLoad"
-        Me.btnProDiagLoad.Size = New System.Drawing.Size(84, 45)
+        Me.btnProDiagLoad.Size = New System.Drawing.Size(84, 28)
         Me.btnProDiagLoad.TabIndex = 1
         Me.btnProDiagLoad.Text = "Laden"
         Me.btnProDiagLoad.UseVisualStyleBackColor = True
@@ -182,7 +172,7 @@ Partial Class FormMain
         '
         Me.btnReplacementsLoad.Location = New System.Drawing.Point(894, 19)
         Me.btnReplacementsLoad.Name = "btnReplacementsLoad"
-        Me.btnReplacementsLoad.Size = New System.Drawing.Size(84, 45)
+        Me.btnReplacementsLoad.Size = New System.Drawing.Size(84, 28)
         Me.btnReplacementsLoad.TabIndex = 1
         Me.btnReplacementsLoad.Text = "Laden"
         Me.btnReplacementsLoad.UseVisualStyleBackColor = True
@@ -226,9 +216,6 @@ Partial Class FormMain
 
     Friend WithEvents MainMenu As MenuStrip
     Friend WithEvents DateiToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents SymboltabelleLadenToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ProDiagLadenToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents TextersetzungenLadenToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents BeendenToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
     Friend WithEvents SaveFileDialog1 As SaveFileDialog
@@ -242,4 +229,5 @@ Partial Class FormMain
     Friend WithEvents btnReplacementsLoad As Button
     Friend WithEvents dgvReplacements As DataGridView
     Friend WithEvents btnProDiagSave As Button
+    Friend WithEvents btnSymbolsMap As Button
 End Class
