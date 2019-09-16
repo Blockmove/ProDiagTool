@@ -289,13 +289,13 @@ Public Class FormMain
                     And Not rowProDiag.Item("Specific text field").ToString.Contains("Text fehlt") _
                     And Not rowProDiag.Item("Specific text field").ToString = SpecificText _
                 Then
-                    Select Case MessageBox.Show(rowProDiag.Item("Specific text field").ToString & vbCrLf & "Neuer Text: " & vbCrLf & SpecificText _
-                                                , "Spezifischen Text überschreiben", MessageBoxButtons.YesNo)
-                        Case Windows.Forms.DialogResult.Yes
-                            rowProDiag.Item("Specific text field") = SpecificText
-                    End Select
+                    If MessageBox.Show(rowProDiag.Item("Specific text field").ToString & vbCrLf & "Neuer Text: " & vbCrLf & SpecificText _
+                                                , "Spezifischen Text überschreiben", MessageBoxButtons.YesNo) = DialogResult.Yes Then
+
+                        rowProDiag.Item("Specific text field") = SpecificText
+                    End If
                 Else
-                    rowProDiag.Item("Specific text field") = SpecificText
+                        rowProDiag.Item("Specific text field") = SpecificText
                 End If
                 Anzahl += 1
             Next
