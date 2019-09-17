@@ -239,6 +239,11 @@ Public Class FormMain
     End Function
 
     Private Function SpecificTextCreate() As Integer
+        '<SpecificField>
+        '<Entry Language="de-DE">Text B</Entry>
+        '</SpecificField>
+        Dim Prefix As String = "<SpecificField>" & vbCrLf & "<Entry Language=" & """de-DE""" & ">"
+        Dim Suffix As String = "</Entry>" & vbCrLf & "</SpecificField>"
         Dim rowProDiag As DataRow
         Dim Operant As String
         Dim Adresse As String
@@ -261,7 +266,7 @@ Public Class FormMain
                 End If
 
                 'Kommentar
-                Comment = "Text: " & rowProDiag.Item("Comment").ToString
+                Comment = rowProDiag.Item("Comment").ToString
                 For Each rowReplacement In dsReplacements.Tables("[Ersetzungen$]").Rows
                     Replace = False
                     'Trigger prüfen
@@ -283,7 +288,7 @@ Public Class FormMain
                 End If
 
                 'Spezifischen Text zusammenbauen
-                SpecificText = Comment & " " & Operant & " " & Adresse
+                SpecificText = Prefix & Comment & " " & Operant & " " & Adresse & Suffix
 
                 If rowProDiag.Item("Specific text field").ToString <> "" _
                     And Not rowProDiag.Item("Specific text field").ToString.Contains("Text fehlt") _
@@ -295,7 +300,7 @@ Public Class FormMain
                         rowProDiag.Item("Specific text field") = SpecificText
                     End If
                 Else
-                        rowProDiag.Item("Specific text field") = SpecificText
+                    rowProDiag.Item("Specific text field") = SpecificText
                 End If
                 Anzahl += 1
             Next
