@@ -239,11 +239,13 @@ Public Class FormMain
     End Function
 
     Private Function SpecificTextCreate() As Integer
+        'Der Specific Text hat folgendes Format (XML)
         '<SpecificField>
-        '<Entry Language="de-DE">Text B</Entry>
+        '<Entry Language="de-DE">Text ABC</Entry>
         '</SpecificField>
-        Dim Prefix As String = "<SpecificField>" & vbCrLf & "<Entry Language=" & """de-DE""" & ">"
-        Dim Suffix As String = "</Entry>" & vbCrLf & "</SpecificField>"
+        Const Prefix As String = "<SpecificField>" & vbCrLf & "<Entry Language=" & """de-DE""" & ">"
+        Const Suffix As String = "</Entry>" & vbCrLf & "</SpecificField>"
+
         Dim rowProDiag As DataRow
         Dim Operant As String
         Dim Adresse As String
@@ -252,6 +254,7 @@ Public Class FormMain
         Dim Replace As Boolean
         Dim SpecificText As String
         Dim Anzahl As Integer
+
         Try
             For Each rowProDiag In dsProDiag.Tables("[ProDiag Supervisions$]").Rows
 
