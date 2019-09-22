@@ -1,5 +1,6 @@
 ﻿Imports System.Data.OleDb
 Imports System.IO
+
 Public Class FormMain
 
     Dim dsSymbol As DataSet
@@ -12,6 +13,8 @@ Public Class FormMain
 
     Dim dsReplacements As DataSet
     Dim ReplacementsLoaded As Boolean
+
+    Dim SpecificText As New classSpecificText
 
     Private Sub BeendenToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles BeendenToolStripMenuItem.Click
         Me.Close()
@@ -41,7 +44,7 @@ Public Class FormMain
 
     Private Sub BtnSymbolsMap_Click(sender As Object, e As EventArgs) Handles btnSymbolsMap.Click
         Dim Anzahl As Integer
-        Anzahl = SymbolsMap()
+        Anzahl = SpecificText.SymbolsMap(dsSymbol, dsProDiag)
         MsgBox("Symbole gefunden: " & Anzahl)
     End Sub
 
@@ -216,27 +219,27 @@ Public Class FormMain
         Connection.Dispose()
     End Sub
 
-    Private Function SymbolsMap() As Integer
-        Dim rowProDiag As DataRow
-        Dim rowSymbol As DataRow
-        Dim Anzahl As Integer
-        Try
-            For Each rowProDiag In dsProDiag.Tables("[ProDiag Supervisions$]").Rows
-                For Each rowSymbol In dsSymbol.Tables("[PLC Tags$]").Rows
-                    'Bei Supervised tag müssen die Anführungszeichen Chr(34) entfernt werden  
-                    If rowProDiag.Item("Supervised tag").ToString.Replace(Chr(34), "") = rowSymbol.Item("Name").ToString Then
-                        'Bei Logical Adress wird das % entfernt
-                        rowProDiag.Item("Adresse") = rowSymbol.Item("Logical Address").ToString.Replace("%", "")
-                        rowProDiag.Item("Comment") = rowSymbol.Item("Comment")
-                        Anzahl += 1
-                    End If
-                Next
-            Next
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
-        SymbolsMap = Anzahl
-    End Function
+    'Private Function SymbolsMap() As Integer
+    '    Dim rowProDiag As DataRow
+    '    Dim rowSymbol As DataRow
+    '    Dim Anzahl As Integer
+    '    Try
+    '        For Each rowProDiag In dsProDiag.Tables("[ProDiag Supervisions$]").Rows
+    '            For Each rowSymbol In dsSymbol.Tables("[PLC Tags$]").Rows
+    '                'Bei Supervised tag müssen die Anführungszeichen Chr(34) entfernt werden  
+    '                If rowProDiag.Item("Supervised tag").ToString.Replace(Chr(34), "") = rowSymbol.Item("Name").ToString Then
+    '                    'Bei Logical Adress wird das % entfernt
+    '                    rowProDiag.Item("Adresse") = rowSymbol.Item("Logical Address").ToString.Replace("%", "")
+    '                    rowProDiag.Item("Comment") = rowSymbol.Item("Comment")
+    '                    Anzahl += 1
+    '                End If
+    '            Next
+    '        Next
+    '    Catch ex As Exception
+    '        MsgBox(ex.Message)
+    '    End Try
+    '    SymbolsMap = Anzahl
+    'End Function
 
     Private Function SpecificTextCreate() As Integer
         'Der Specific Text hat folgendes Format (XML)
