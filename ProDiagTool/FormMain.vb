@@ -3,16 +3,16 @@ Imports System.IO
 
 Public Class FormMain
 
-    Dim dsSymbol As DataSet
-    Dim SymbolLoaded As Boolean
+    'Dim dsSymbol As DataSet
+    'Dim SymbolLoaded As Boolean
 
-    Dim SourceFilenameProDiag As String
-    Dim fiProDiagSourceFile As FileInfo
-    Dim dsProDiag As DataSet
-    Dim ProDiagLoaded As Boolean
+    'Dim SourceFilenameProDiag As String
+    'Dim fiProDiagSourceFile As FileInfo
+    'Dim dsProDiag As DataSet
+    'Dim ProDiagLoaded As Boolean
 
-    Dim dsReplacements As DataSet
-    Dim ReplacementsLoaded As Boolean
+    'Dim dsReplacements As DataSet
+    'Dim ReplacementsLoaded As Boolean
 
     Dim SpecificText As New classSpecificText
 
@@ -26,10 +26,10 @@ Public Class FormMain
 
     Private Sub BtnProDiagLoad_Click(sender As Object, e As EventArgs) Handles btnProDiagLoad.Click
         ProDiagLoad()
-        If ProDiagLoaded Then
-            dsProDiag.Tables(0).Columns.Add("Adresse")
-            dsProDiag.Tables(0).Columns.Add("Comment")
-            dgvProDiag.DataSource = dsProDiag
+        If GlobalVar.ProDiagLoaded Then
+            GlobalVar.dsProDiag.Tables(0).Columns.Add("Adresse")
+            GlobalVar.dsProDiag.Tables(0).Columns.Add("Comment")
+            dgvProDiag.DataSource = GlobalVar.dsProDiag
             dgvProDiag.DataMember = "[ProDiag Supervisions$]"
         End If
     End Sub
@@ -44,7 +44,7 @@ Public Class FormMain
 
     Private Sub BtnSymbolsMap_Click(sender As Object, e As EventArgs) Handles btnSymbolsMap.Click
         Dim Anzahl As Integer
-        Anzahl = SpecificText.SymbolsMap(dsSymbol, dsProDiag)
+        Anzahl = SpecificText.SymbolsMap()
         MsgBox("Symbole gefunden: " & Anzahl)
     End Sub
 
@@ -61,7 +61,7 @@ Public Class FormMain
         Dim SqlStatement As String
         Dim Adapter As OleDbDataAdapter
 
-        SymbolLoaded = False
+        GlobalVar.SymbolLoaded = False
         Try
             OpenFileDialog1.Title = "Symboltabelle laden"
             OpenFileDialog1.InitialDirectory = My.Computer.FileSystem.SpecialDirectories.MyDocuments
@@ -73,11 +73,11 @@ Public Class FormMain
                 Connection = New OleDbConnection(Connectionstring)
                 SqlStatement = "SELECT Name, [Logical Address], Comment, [Data Type] FROM [PLC Tags$]"
                 Adapter = New OleDbDataAdapter(SqlStatement, Connection)
-                dsSymbol = New DataSet
-                Adapter.Fill(dsSymbol, "[PLC Tags$]")
-                dgvSymbol.DataSource = dsSymbol
+                GlobalVar.dsSymbol = New DataSet
+                Adapter.Fill(GlobalVar.dsSymbol, "[PLC Tags$]")
+                dgvSymbol.DataSource = GlobalVar.dsSymbol
                 dgvSymbol.DataMember = "[PLC Tags$]"
-                SymbolLoaded = True
+                GlobalVar.SymbolLoaded = True
             End If
         Catch ex As Exception
             MsgBox(ex.Message)
@@ -93,8 +93,8 @@ Public Class FormMain
         Dim SqlStatement As String
         Dim Adapter As OleDbDataAdapter
 
-        ProDiagLoaded = False
-        SourceFilenameProDiag = Nothing
+        GlobalVar.ProDiagLoaded = False
+        GlobalVar.SourceFilenameProDiag = Nothing
         Try
             OpenFileDialog1.Title = "ProDiag-Datei laden"
             OpenFileDialog1.InitialDirectory = My.Computer.FileSystem.SpecialDirectories.MyDocuments
@@ -106,10 +106,10 @@ Public Class FormMain
                 Connection = New OleDbConnection(Connectionstring)
                 SqlStatement = "SELECT ID, [Supervised tag], Trigger, [Specific text field] FROM [ProDiag Supervisions$]"
                 Adapter = New OleDbDataAdapter(SqlStatement, Connection)
-                dsProDiag = New DataSet
-                Adapter.Fill(dsProDiag, "[ProDiag Supervisions$]")
-                SourceFilenameProDiag = FileInfoSourceFile.FullName
-                ProDiagLoaded = True
+                GlobalVar.dsProDiag = New DataSet
+                Adapter.Fill(GlobalVar.dsProDiag, "[ProDiag Supervisions$]")
+                GlobalVar.SourceFilenameProDiag = FileInfoSourceFile.FullName
+                GlobalVar.ProDiagLoaded = True
             End If
         Catch ex As Exception
             MsgBox(ex.Message)
@@ -133,12 +133,12 @@ Public Class FormMain
         'Datei-Operationen
         Try
             'Orginalfile sichern - Endung .bak
-            FileInfoSourceFile = New FileInfo(SourceFilenameProDiag)
-            BackupFilename = SourceFilenameProDiag.Replace(".xlsx", ".bak")
+            FileInfoSourceFile = New FileInfo(GlobalVar.SourceFilenameProDiag)
+            BackupFilename = GlobalVar.SourceFilenameProDiag.Replace(".xlsx", ".bak")
             If File.Exists(BackupFilename) Then
                 File.Delete(BackupFilename)
             End If
-            File.Copy(SourceFilenameProDiag, BackupFilename)
+            File.Copy(GlobalVar.SourceFilenameProDiag, BackupFilename)
 
             'SavFileDialog init
             SaveFileDialog1.Title = "ProDiag-Datei speichern"
@@ -148,11 +148,11 @@ Public Class FormMain
             If SaveFileDialog1.ShowDialog() = DialogResult.OK Then
                 DestFilename = SaveFileDialog1.FileName
                 'Neuer Filename -> Orignalfile kopieren
-                If DestFilename.ToLower <> SourceFilenameProDiag.ToLower Then
+                If DestFilename.ToLower <> GlobalVar.SourceFilenameProDiag.ToLower Then
                     If File.Exists(DestFilename) Then
                         File.Delete(DestFilename)
                     End If
-                    File.Copy(SourceFilenameProDiag, DestFilename)
+                    File.Copy(GlobalVar.SourceFilenameProDiag, DestFilename)
                 End If
                 FileInfoDestFile = New FileInfo(DestFilename)
                 DestFilename = FileInfoDestFile.FullName
@@ -176,7 +176,7 @@ Public Class FormMain
                 Command.Parameters.AddWithValue("@ID", "0")
                 Connection.Open()
                 Anzahl = Command.ExecuteNonQuery()
-                For Each rowProDiag In dsProDiag.Tables(0).Rows
+                For Each rowProDiag In GlobalVar.dsProDiag.Tables(0).Rows
                     Command.Parameters("@SpecificTextField").Value = rowProDiag.Item("Specific text field")
                     Command.Parameters("@ID").Value = rowProDiag.Item("ID")
                     Anzahl = Command.ExecuteNonQuery()
@@ -207,9 +207,9 @@ Public Class FormMain
                 Connectionstring = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & FileInfoSourceFile.FullName & ";Extended Properties = ""Excel 12.0 Xml;HDR=YES"""
                 Connection = New OleDbConnection(Connectionstring)
                 Adapter = New OleDbDataAdapter("SELECT * FROM [Ersetzungen$]", Connection)
-                dsReplacements = New DataSet
-                Adapter.Fill(dsReplacements, "[Ersetzungen$]")
-                dgvReplacements.DataSource = dsReplacements
+                GlobalVar.dsReplacements = New DataSet
+                Adapter.Fill(GlobalVar.dsReplacements, "[Ersetzungen$]")
+                dgvReplacements.DataSource = GlobalVar.dsReplacements
                 dgvReplacements.DataMember = "[Ersetzungen$]"
             End If
         Catch ex As Exception
@@ -259,7 +259,7 @@ Public Class FormMain
         Dim Anzahl As Integer
 
         Try
-            For Each rowProDiag In dsProDiag.Tables("[ProDiag Supervisions$]").Rows
+            For Each rowProDiag In GlobalVar.dsProDiag.Tables("[ProDiag Supervisions$]").Rows
 
                 'Operant / Symbol
                 Operant = "|Var: " & rowProDiag.Item("Supervised tag").ToString.Replace(Chr(34), "")
@@ -273,7 +273,7 @@ Public Class FormMain
 
                 'Kommentar
                 Comment = rowProDiag.Item("Comment").ToString
-                For Each rowReplacement In dsReplacements.Tables("[Ersetzungen$]").Rows
+                For Each rowReplacement In GlobalVar.dsReplacements.Tables("[Ersetzungen$]").Rows
                     Replace = False
                     'Trigger prüfen
                     If rowReplacement.Item("Trigger") = "True" And rowProDiag.Item("Trigger") = "True" Then
